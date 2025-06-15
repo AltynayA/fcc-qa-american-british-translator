@@ -74,5 +74,19 @@ suite('Functional Tests', () => {
                 done();
             })
     })
+//     #6
+    test('Translation with text that needs no translation: POST request to /api/translate', (done) => {
+        chai.request(server)
+            .post('/api/translate')
+            .send({
+                text: "Everything is fine.",
+                locale: "american-to-british"
+            })
+            .end((err, res) => {
+                assert.equal(res.body.text, "Everything is fine.");
+                assert.equal(res.body.translation, "Everything looks good to me!");
+                done();
+            });
+    });
 
 })
