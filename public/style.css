@@ -1,6 +1,20 @@
 code {
   background: #d0d0d5;
 }
+body {
+  background: #8ACE00;
+}
+#bg-video {
+  position: absolute;
+  top: 70px;         /* Push it up slightly from the bottom */
+  left: 50px;           /* Push it slightly from the left */
+  width: 300px;         /* Make it smaller */
+  height: 200px;        /* Adjust as needed */
+  object-fit: cover;
+  z-index: 2;          /* Keeps it in the background */
+  border-radius: 10px;  /* Optional: rounded corners */
+  /*box-shadow: 0 0 10px rgba(0,0,0,0.5); !* Optional: soft shadow *!*/
+}
 
 .container {
   display: flex;

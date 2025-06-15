@@ -20,8 +20,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.route('/')
   .get(function (req, res) {
     res.sendFile(process.cwd() + '/views/index.html');
-  }); 
-
+  });
+console.log('JS is running');
 //For FCC testing purposes
 fccTestingRoutes(app);
 
