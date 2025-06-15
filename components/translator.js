@@ -29,28 +29,30 @@ class Translator {
         const lowerText = text.toLowerCase();
         const matchesMap = {};
 
-        // Titles (Mr., Dr., etc.)
-        for (let [americanTitle, britishTitle] of Object.entries(titles)) {
-            const regex = new RegExp(`\\b${escapeRegex(americanTitle)}`, 'gi');
+        // titles
+        for (let [sourceTitle, targetTitle] of Object.entries(titles)) {
+            const regex = new RegExp(`\\b${escapeRegex(sourceTitle)}`, 'gi');
             const matches = text.match(regex);
             if (matches) {
                 matches.forEach((match) => {
-                    const replacement = britishTitle.charAt(0).toUpperCase() + britishTitle.slice(1);
-                    matchesMap[match.toLowerCase()] = replacement;
+                    const replacement =
+                        targetTitle.charAt(0).toUpperCase() + targetTitle.slice(1);
+                    matchesMap[match] = replacement;
                 });
             }
         }
 
-        // Phrases with spaces
-        const phrases = Object.entries(dict).filter(([k]) => k.includes(' '));
-        for (let [k, v] of phrases) {
-            const regex = new RegExp(`\\b${escapeRegex(k)}\\b`, 'i');
-            if (regex.test(lowerText)) {
-                matchesMap[k] = v;
+        // with spaces
+        for (let [k, v] of Object.entries(dict)) {
+            if (k.includes(' ')) {
+                const regex = new RegExp(`\\b${escapeRegex(k)}\\b`, 'i');
+                if (regex.test(lowerText)) {
+                    matchesMap[k] = v;
+                }
             }
         }
 
-        // Single words
+        // single words
         const words = lowerText.match(/\b[\w\-']+\b/g) || [];
         for (let word of words) {
             if (dict[word]) {
@@ -58,7 +60,7 @@ class Translator {
             }
         }
 
-        // Time formats
+        // time
         const times = text.match(timeRegex);
         if (times) {
             for (let t of times) {
@@ -85,7 +87,9 @@ class Translator {
         );
 
         return text.replace(reg, (match) => {
-            const key = match.toLowerCase();
+            const key = Object.keys(matchesMap).find(
+                (k) => k.toLowerCase() === match.toLowerCase()
+            );
             return matchesMap[key] || match;
         });
     }
@@ -100,13 +104,14 @@ class Translator {
         );
 
         return text.replace(reg, (match) => {
-            const key = match.toLowerCase();
+            const key = Object.keys(matchesMap).find(
+                (k) => k.toLowerCase() === match.toLowerCase()
+            );
             const replacement = matchesMap[key] || match;
             return `<span class="highlight">${replacement}</span>`;
         });
     }
 
-    // ✅ Dispatcher: choose based on locale field
     translate(text, locale) {
         if (locale === 'american-to-british') {
             return this.toBritishEnglish(text);

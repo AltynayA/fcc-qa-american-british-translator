@@ -70,7 +70,7 @@ suite('Functional Tests', () => {
                 locale:"american-to-british"
             })
             .end((err, res) => {
-                assert.equal(res.body, 'Everything looks good to me!')
+                assert.equal(res.body.error, 'No text to translate')
                 done();
             })
     })

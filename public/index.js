@@ -28,3 +28,7 @@ const translateHandler = async () => {
 };
 
 document.getElementById("translate-btn").addEventListener("click", translateHandler)
+document.getElementById('translate-btn').addEventListener('click', () => {
+  const video = document.getElementById('bg-video');
+  video.classList.add('hidden');
+});
